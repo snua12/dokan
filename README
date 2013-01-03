@@ -1,0 +1,28 @@
+This repo is based on http://dokan-dev.net
+
+For build is required WDK (Windows Driver Kit) http://www.microsoft.com/whdc/DevTools/WDK/WDKpkg.mspx.
+(Tested with 7.1)
+
+
+BUILD
+based on: http://dokan-dev.net/en/docs/how-to-build-dokan-library/
+
+Run “build /wcbg” command within each folders.
+
+INSTALL
+Copy dokan.sys under \Windows\system32\drivers
+Copy dokan.dll under \Windows\system32
+Place dokanctl.exe and mounter.exe in the same folder.
+
+Run “dokanctl.exe /i a” This means register the driver and the service to Windows.
+You can also do them separately.
+“dokanctl.exe /i d” Install driver.
+“dokanctl.exe /i s” install service.
+
+Uninstall Driver
+
+“dokanctl.exe /r a” Uninstall both driver and service.
+“dokanctl.exe /r d” Uninstall driver.
+“dokanctl.exe /r s” Uninstall service.
+You should restart your computer after uninstalling driver.
+
