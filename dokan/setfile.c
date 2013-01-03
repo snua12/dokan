@@ -174,8 +174,10 @@ PEVENT_CONTEXT		EventContext,
 	PDOKAN_RENAME_INFORMATION renameInfo =
 		(PDOKAN_RENAME_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
-	WCHAR newName[MAX_PATH];
-	ZeroMemory(newName, sizeof(newName));
+	int rv = -1;
+	WCHAR * newName = malloc(sizeof(WCHAR) * (renameInfo->FileNameLength + 1));
+	if (newName == NULL) return -1;
+	ZeroMemory(newName, sizeof(WCHAR) * (renameInfo->FileNameLength + 1) );
 
 	if (renameInfo->FileName[0] != L'\\') {
 		ULONG pos;
@@ -191,13 +193,20 @@ PEVENT_CONTEXT		EventContext,
 	}
 
 	if (!DokanOperations->MoveFile)
+	{
+		free(newName);
 		return -1;
+	}
 
-	return DokanOperations->MoveFile(
+	rv = DokanOperations->MoveFile(
 		EventContext->SetFile.FileName,
 		newName,
 		renameInfo->ReplaceIfExists,
 		FileInfo);
+
+	free(newName);
+
+	return rv;
 }
 
 
